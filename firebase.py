@@ -23,4 +23,10 @@ def push_nota(nota):
 
 
 def get_note():
-    return db.get
+    output = ""
+    data = db.child("note").get()
+    for i in data:
+        for j in i.val().keys():
+            output += i.val()[j] + " "
+        output += "\n"
+    return output
