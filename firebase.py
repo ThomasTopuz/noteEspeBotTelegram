@@ -1,4 +1,6 @@
 import pyrebase
+from datetime import datetime
+
 fireBaseConfig = {
     'apiKey': "AIzaSyD1XfInWrTrS3RpmCQzqNJJu-jiHH8Ores",
     'authDomain': "noteespebot.firebaseapp.com",
@@ -13,20 +15,25 @@ auth = firebase.auth()
 db = firebase.database()
 
 
-def push_nota(nota):
-    data  = {
-        'data': nota[0],
-        'materia': nota[1],
-        'nota': nota[2]
+def push_espe_fatto(materia):
+    now = datetime.now()
+    data = {
+        'data': now.strftime("%m/%d/%Y"),
+        'materia': materia,
+        'nota': -1
     }
-    db.child('note').push(data)
+    db.child('espe').push(data)
+
+
+def add_nota(nota, espe_id):
+    db.child('espe').child(espe_id).update({"nota": nota})
 
 
 def get_note():
-    output = ""
-    data = db.child("note").get()
-    for i in data:
-        for j in i.val().keys():
-            output += i.val()[j] + " "
-        output += "\n"
-    return output
+    espe = db.child('espe').get()
+    print(espe)
+    return espe
+
+
+def get_espe_senza_nota():
+    return db.child('espe').order_by_child('nota').equal_to(-1).get()
