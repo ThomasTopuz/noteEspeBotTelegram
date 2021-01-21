@@ -1,5 +1,13 @@
-from firebase import get_note
-#cronjob che parte ogni venerdi
-from telegram import *
-from telegram.ext import *
-print("sono un cronjob che va ogni minuto!")
+import docx
+import os
+
+doc = docx.Document('mytable.docx')
+username = "ThomasTopuz"
+
+c = 0
+doc.paragraphs[9].text = username
+for i in doc.paragraphs:
+    print(i.text, c)
+    c += 1
+
+doc.save('mytable.docx')

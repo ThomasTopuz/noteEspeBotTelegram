@@ -8,7 +8,7 @@ fireBaseConfig = {
     'storageBucket': "noteespebot.appspot.com",
     'messagingSenderId': "298424559882",
     'appId': "1:298424559882:web:579508cdcd81fea1faf2f3",
-    "databaseURL":"https://noteespebot-default-rtdb.firebaseio.com/"
+    "databaseURL": "https://noteespebot-default-rtdb.firebaseio.com/"
 }
 
 firebase = pyrebase.initialize_app(fireBaseConfig)
@@ -16,25 +16,41 @@ auth = firebase.auth()
 db = firebase.database()
 
 
-def push_espe_fatto(materia):
+def push_espe_fatto(materia, username):
     now = datetime.now()
     data = {
         'data': now.strftime("%m/%d/%Y"),
         'materia': materia,
         'nota': -1,
-        'data_ricevuto': -1
+        'week_number': get_week_number(),
+        'week_number_ricevuto': -1
     }
-    db.child('espe').push(data)
+    db.child(username).child('espe').push(data)
 
 
-def add_nota(nota, espe_id):
-    now = datetime.now()
-    db.child('espe').child(espe_id).update({"nota": nota, 'data_ricevuto': now.strftime("%m/%d/%Y")})
+def add_nota(nota, espe_id, username):
+    db.child(username).child('espe').child(espe_id).update(
+        {
+            "nota": nota,
+            'week_number_ricevuto': get_week_number()
+        }
+    )
 
 
-def get_espe_con_note():
-    return db.child('espe').order_by_child('nota').start_at(1).get()
+# per registrare la nota
+def get_espe_senza_nota(username):
+    return db.child(username).child('espe').order_by_child('nota').equal_to(-1).get()
 
 
-def get_espe_senza_nota():
-    return db.child('espe').order_by_child('nota').equal_to(-1).get()
+# espe fatti della settimana corrente
+def get_espe_fatti(username):
+    return db.child(username).child('espe').order_by_child('week_number').equal_to(get_week_number()).get()
+
+
+# espe ritornati la settimana corrente
+def get_espe_ritornati(username):
+    return db.child(username).child('espe').order_by_child('week_number_ricevuto').equal_to(get_week_number()).get()
+
+
+def get_week_number():
+    return datetime.now().isocalendar()[1]
