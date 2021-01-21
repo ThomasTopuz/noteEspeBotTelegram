@@ -4,10 +4,12 @@ import firebase as fb
 
 bot_api = '1598156271:AAE_TTOleZ7mKUpwtzNIbm22WnqtRSZs-nk'
 bot = Bot(bot_api)
-print(bot.get_me())
+print('running...')
+
 updater = Updater(bot_api, use_context=True)
 dispatcher: Dispatcher = updater.dispatcher
 
+# global vars
 mod = ""
 espe_id = ""
 
@@ -40,7 +42,8 @@ def registra_nota_msg(update: Update, context: CallbackContext):
     ]
 
     reply_markup = InlineKeyboardMarkup(keyboard)
-    update.message.reply_text('Di quale espe vuoi registrare la nota?', reply_markup=reply_markup)
+    update.message.reply_text(
+        'Di quale espe vuoi registrare la nota?', reply_markup=reply_markup)
     global mod
     mod = "NOTA"
 
@@ -70,7 +73,7 @@ def user_input_handler(update: Update, context: CallbackContext):
         fb.add_nota(nota, espe_id)
         bot.send_message(
             chat_id=update.effective_chat.id,
-            text="Nota registrata con successo",
+            text="Nota registrata con successo!",
             parse_mode=ParseMode.HTML
         )
         mod = ""
@@ -78,29 +81,38 @@ def user_input_handler(update: Update, context: CallbackContext):
 
 
 def lista_note(update: Update, context: CallbackContext):
-    output = "Ecco le tue note: \n"
-    data = fb.get_note()
-    output += format_data(data)
-    bot.send_message(chat_id=update.effective_chat.id, text=output, parse_mode=ParseMode.HTML)
+    espe_senza_nota = fb.get_espe_senza_nota()
+    espe_con_nota = fb.get_espe_con_note()
+
+    print(len(espe_con_nota.val()))
+
+
+    output = "Ecco gli espe che hai fatto: \n" if len(espe_senza_nota.val())>0 else "non ci sono espe senza nota"
+    output += format_data(fb.get_espe_senza_nota())
+    output += "Ecco gli espe di cui hai ricevuto la nota: \n"
+    output += format_data(fb.get_espe_con_note())
+    print('foo')
+    bot.send_message(chat_id=update.effective_chat.id,
+                     text=output, parse_mode=ParseMode.HTML)
 
 
 def format_data(data):
     output = ""
     for i in data:
+        print(i)
         for j in i.val().keys():
-            output += str(i.val()[j]) + " "
+            output += str(i.val()[j]) + " | "
         output += "\n"
     return output
 
 
 dispatcher.add_handler(CommandHandler('start', start))
-
+dispatcher.add_handler(CommandHandler('lista_note', lista_note))
 dispatcher.add_handler(CommandHandler('registra_espe', espe_fatto_msg))
 dispatcher.add_handler(CommandHandler('registra_nota', registra_nota_msg))
 updater.dispatcher.add_handler(CallbackQueryHandler(inserisci_nota))
-
 dispatcher.add_handler(MessageHandler(Filters.text, user_input_handler))
-dispatcher.add_handler(CommandHandler('lista_nota', lista_note))
+
 
 updater.start_polling()
 

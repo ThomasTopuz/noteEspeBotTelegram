@@ -10,6 +10,7 @@ fireBaseConfig = {
     'appId': "1:298424559882:web:579508cdcd81fea1faf2f3",
     "databaseURL":"https://noteespebot-default-rtdb.firebaseio.com/"
 }
+
 firebase = pyrebase.initialize_app(fireBaseConfig)
 auth = firebase.auth()
 db = firebase.database()
@@ -20,19 +21,19 @@ def push_espe_fatto(materia):
     data = {
         'data': now.strftime("%m/%d/%Y"),
         'materia': materia,
-        'nota': -1
+        'nota': -1,
+        'data_ricevuto': -1
     }
     db.child('espe').push(data)
 
 
 def add_nota(nota, espe_id):
-    db.child('espe').child(espe_id).update({"nota": nota})
+    now = datetime.now()
+    db.child('espe').child(espe_id).update({"nota": nota, 'data_ricevuto': now.strftime("%m/%d/%Y")})
 
 
-def get_note():
-    espe = db.child('espe').get()
-    print(espe)
-    return espe
+def get_espe_con_note():
+    return db.child('espe').order_by_child('nota').start_at(1).get()
 
 
 def get_espe_senza_nota():
