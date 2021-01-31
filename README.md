@@ -9,7 +9,7 @@ Usando una sessione tmux posso continuare a runnare il mio script anche con term
 
 <h3>Database</h3>
 Come database userò il realtime database di firebase e lo organizzo nel seguente modo:
-
+<img src="https://github.com/ThomasTopuz/noteEspeBot/blob/master/Capture.PNG?raw=true">
 I dati che non ha ancora inserito l'utente verrano messi a -1.
 Quando l'utente vorra inserire la nota di un espe che ha ricevuto, su telegram appariranno tutti gli espe che non hanno ancora la nota,
 e con un click si può aggiungere la nota.
