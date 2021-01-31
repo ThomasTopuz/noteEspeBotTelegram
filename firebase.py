@@ -44,7 +44,8 @@ def get_espe_senza_nota(username):
 
 # espe fatti della settimana corrente
 def get_espe_fatti(username):
-    return db.child(username).child('espe').order_by_child('week_number').equal_to(get_week_number()).get()
+    return db.child(username).child('espe').order_by_child('week_number')\
+        .equal_to(get_week_number()).get()
 
 
 # espe ritornati la settimana corrente
