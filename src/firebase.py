@@ -35,8 +35,6 @@ def add_nota(nota, espe_id, username):
             'week_number_ricevuto': get_week_number()
         }
     )
-
-
 # per registrare la nota
 def get_espe_senza_nota(username):
     return db.child(username).child('espe').order_by_child('nota').equal_to(-1).get()
