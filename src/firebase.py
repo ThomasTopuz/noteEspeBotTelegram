@@ -22,19 +22,42 @@ def push_espe_fatto(materia, username):
         'data': now.strftime("%m/%d/%Y"),
         'materia': materia,
         'nota': -1,
+        "media": -1,
         'week_number': get_week_number(),
         'week_number_ricevuto': -1
     }
     db.child(username).child('espe').push(data)
 
 
+# calcola la media
+def calcola_media(materia, username, nuova_nota):
+    espe_fatti = db.child(username).child('espe').order_by_child('materia').equal_to(materia).get().val()
+    count = float(len(espe_fatti) + 1)
+    sum_note = float(nuova_nota)
+    print(espe_fatti)
+    for i in espe_fatti:
+        print(espe_fatti[i])
+        if espe_fatti[i]['nota'] != -1:
+            sum_note += float((espe_fatti[i]['nota']))
+        else:
+            count -= 1
+    return round(float(sum_note / count), 2)
+
+
 def add_nota(nota, espe_id, username):
+    materia = db.child(username).child('espe').child(espe_id).get().val()['materia']
+    print(materia)
+    media = calcola_media(materia, username, nota)
     db.child(username).child('espe').child(espe_id).update(
         {
             "nota": nota,
+            "media": media,
             'week_number_ricevuto': get_week_number()
         }
     )
+
+
+# GET
 # per registrare la nota
 def get_espe_senza_nota(username):
     return db.child(username).child('espe').order_by_child('nota').equal_to(-1).get()
@@ -42,7 +65,7 @@ def get_espe_senza_nota(username):
 
 # espe fatti della settimana corrente
 def get_espe_fatti(username):
-    return db.child(username).child('espe').order_by_child('week_number')\
+    return db.child(username).child('espe').order_by_child('week_number') \
         .equal_to(get_week_number()).get()
 
 

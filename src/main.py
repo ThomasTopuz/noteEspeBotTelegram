@@ -13,6 +13,17 @@ dispatcher: Dispatcher = updater.dispatcher
 mod = ""
 espe_id = ""
 
+materie = {
+    'Thomastopuz': (
+        'm122', 'm226A', 'm226B', 'm153', 'm411', 'matematica', 'fisica', 'inglese', 'tedesco', 'italiano', 'storia'),
+
+    'Emilijadaceva': (
+        'm120', 'm133', 'm152', 'm306', 'm326', 'Fise', 'matematica', 'fisica', 'chimica', 'tedesco', 'italiano',
+        'inglese'),
+
+    'Amandamarchetti': ('m150', 'm151', 'm155', 'm183', 'm242', 'matematica', 'fisica', 'chimica', 'tedesco'),
+}
+
 
 def start(update: Update, context: CallbackContext):
     username = update.effective_chat.username
@@ -25,11 +36,12 @@ def start(update: Update, context: CallbackContext):
 
 
 def espe_fatto_msg(update: Update, context: CallbackContext):
-    bot.send_message(
-        chat_id=update.effective_chat.id,
-        text="Inserisci la materia dell'espe che hai fatto oggi!",
-        parse_mode=ParseMode.HTML
-    )
+    username = update.effective_chat.username
+    keyboard = [
+        [InlineKeyboardButton(i, callback_data=i)] for i in materie[username]
+    ]
+    reply_markup = InlineKeyboardMarkup(keyboard)
+    update.message.reply_text("Scegli la materia dell'espe che hai fatto oggi!", reply_markup=reply_markup)
     global mod
     mod = "ESPE"
 
@@ -49,27 +61,28 @@ def registra_nota_msg(update: Update, context: CallbackContext):
     mod = "NOTA"
 
 
-def inserisci_nota(update: Update, context: CallbackContext):
-    query = update.callback_query
-    global espe_id
-    espe_id = query.data
-    query.edit_message_text("Inserisci la nota che hai preso di questo test.")
+def inline_keyboard_handler(update: Update, context: CallbackContext):
+    username = update.effective_chat.username
+    # scelta della materia dell espe fatto
+    global mod
+    if mod == "ESPE":
+        materia = update.callback_query.data
+        fb.push_espe_fatto(materia, username)
+        update.callback_query.edit_message_text("Espe registrato con successo!")
+        mod = ""
+    # scelta dell espe (materia e data) di cui si ha ricevuto la nota
+    elif mod == "NOTA":
+        query = update.callback_query
+        global espe_id
+        espe_id = query.data
+        query.edit_message_text("Inserisci la nota che hai preso di questo test.")
 
 
 def user_input_handler(update: Update, context: CallbackContext):
     username = update.effective_chat.username
     user_input = update.message.text.lower()
     global mod
-    print(mod)
-    if mod == "ESPE":
-        materia = user_input
-        fb.push_espe_fatto(materia, username)
-        bot.send_message(
-            chat_id=update.effective_chat.id,
-            text="Espe registrato con successo!",
-            parse_mode=ParseMode.HTML
-        )
-    elif mod == "NOTA":
+    if mod == "NOTA":
         nota = user_input
         global espe_id
         fb.add_nota(nota, espe_id, username)
@@ -114,7 +127,7 @@ dispatcher.add_handler(CommandHandler('start', start))
 dispatcher.add_handler(CommandHandler('insights', lista_note))
 dispatcher.add_handler(CommandHandler('registra_espe', espe_fatto_msg))
 dispatcher.add_handler(CommandHandler('registra_nota', registra_nota_msg))
-updater.dispatcher.add_handler(CallbackQueryHandler(inserisci_nota))
+updater.dispatcher.add_handler(CallbackQueryHandler(inline_keyboard_handler))
 
 updater.start_polling()
 
