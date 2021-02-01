@@ -51,7 +51,7 @@ for i in espe_ritornati:
     cells[0].text = espe_ritornato['data']
     cells[1].text = espe_ritornato['materia']
     cells[2].text = espe_ritornato['nota']
-    cells[3].text = espe_ritornato['nota']
+    cells[3].text = str(espe_ritornato['media'])
     cells[4].text = ""
 
 doc.save('../test.docx')

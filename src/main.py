@@ -49,6 +49,13 @@ def espe_fatto_msg(update: Update, context: CallbackContext):
 def registra_nota_msg(update: Update, context: CallbackContext):
     username = update.effective_chat.username
     espe_senza_nota = fb.get_espe_senza_nota(username)
+    if len(espe_senza_nota.val()) == 0:
+        bot.send_message(
+            chat_id=update.effective_chat.id,
+            text="Non hai più note da registrare.",
+            parse_mode=ParseMode.HTML
+        )
+        return
     keyboard = [
         [InlineKeyboardButton(str(espe_senza_nota.val()[i]['materia'] + "  |  " + espe_senza_nota.val()[i]['data']),
                               callback_data=str(i))] for i in espe_senza_nota.val()
