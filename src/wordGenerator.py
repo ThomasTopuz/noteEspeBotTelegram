@@ -1,14 +1,15 @@
 import docx
 from datetime import datetime
 import firebase as fb
+import os
 
 
-def genera_docx(username):
-    filename = "noteEspeSett" + str(datetime.now().isocalendar()[1]) + ".docx"
+def genera_docx(username, fullname):
+    filename = "noteEspeSett" + str(datetime.now().isocalendar()[1]) + "_" + fullname + ".docx"
     print(filename)
     doc = docx.Document("file.docx")
     # creazione heading
-    doc.paragraphs[9].text = username
+    doc.paragraphs[9].text = fullname
     doc.paragraphs[12].text = datetime.now().strftime("%m/%d/%Y")
     doc.paragraphs[16].text = "Settimana dal X al Y"
 
@@ -60,3 +61,7 @@ def genera_docx(username):
     footer.add_paragraph("Data d'emissione: " + datetime.now().strftime("%m/%d/%Y"))
     doc.save(filename)
     return filename
+
+
+def elimina_file(filename):
+    os.remove(filename)

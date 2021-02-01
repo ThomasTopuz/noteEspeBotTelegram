@@ -1,7 +1,9 @@
 from telegram import *
 from telegram.ext import *
 import firebase as fb
-from wordGenerator import genera_docx
+from wordGenerator import *
+from send_email import send_email
+
 bot_api = '1598156271:AAE_TTOleZ7mKUpwtzNIbm22WnqtRSZs-nk'
 bot = Bot(bot_api)
 print('running...')
@@ -14,10 +16,12 @@ mod = ""
 espe_id = ""
 
 materie = {
+    'JoeKung': (
+        'm122', 'm226A', 'm226B', 'm153', 'm411', 'matematica', 'fisica', 'inglese', 'tedesco', 'italiano', 'storia'),
     'Thomastopuz': (
         'm122', 'm226A', 'm226B', 'm153', 'm411', 'matematica', 'fisica', 'inglese', 'tedesco', 'italiano', 'storia'),
 
-    'Emilijadaceva': (
+    'EmilijaDaceva': (
         'm120', 'm133', 'm152', 'm306', 'm326', 'Fise', 'matematica', 'fisica', 'chimica', 'tedesco', 'italiano',
         'inglese'),
 
@@ -29,7 +33,8 @@ def start(update: Update, context: CallbackContext):
     username = update.effective_chat.username
     bot.send_message(
         chat_id=update.effective_chat.id,
-        text="Benvenuto " + username + ", sono un bot per gestire le note dei tuoi espe settimanali! " +
+        text="Benvenuto " + fb.get_user_info(username)[
+            'fullname'] + ", sono un bot per gestire le note dei tuoi espe settimanali! " +
              "usa / per inserire un comando.",
         parse_mode=ParseMode.HTML
     )
@@ -102,7 +107,7 @@ def user_input_handler(update: Update, context: CallbackContext):
         espe_id = ""
 
 
-def lista_note(update: Update, context: CallbackContext):
+def insights(update: Update, context: CallbackContext):
     username = update.effective_chat.username
     espe_fatti = fb.get_espe_fatti(username)
     espe_ritornati = fb.get_espe_ritornati(username)
@@ -116,9 +121,14 @@ def lista_note(update: Update, context: CallbackContext):
                      text=output, parse_mode=ParseMode.HTML)
 
 
-def generate_docx(update: Update, context: CallbackContext):
-    genera_docx(update.effective_chat.username)
-    bot.send_document(chat_id=update.effective_chat.id, document=open('file.docx', 'rb'))
+def generate_docx_and_send_email(update: Update, context: CallbackContext):
+    username = update.effective_chat.username
+    fullname = fb.get_user_info(username)['fullname']
+    filename = genera_docx(username, fullname)
+    bot.send_document(chat_id=update.effective_chat.id, document=open(filename, 'rb'))
+    send_email(fullname, filename, fb.get_user_info(username)['email'])
+    update.message.reply_text("La email è stata inviata sia a te che a Steve, buon week end!")
+    elimina_file(filename)
 
 
 def format_data(data, props):
@@ -136,10 +146,10 @@ def format_data(data, props):
 
 dispatcher.add_handler(MessageHandler(Filters.text & ~Filters.command, user_input_handler))
 dispatcher.add_handler(CommandHandler('start', start))
-dispatcher.add_handler(CommandHandler('insights', lista_note))
-dispatcher.add_handler(CommandHandler('registra_espe', espe_fatto_msg))
+dispatcher.add_handler(CommandHandler('insights', insights))
+dispatcher.add_handler(CommandHandler('nuovo_espe', espe_fatto_msg))
 dispatcher.add_handler(CommandHandler('registra_nota', registra_nota_msg))
-dispatcher.add_handler(CommandHandler('genera_documento', generate_docx))
+dispatcher.add_handler(CommandHandler('invia_email', generate_docx_and_send_email))
 updater.dispatcher.add_handler(CallbackQueryHandler(inline_keyboard_handler))
 
 updater.start_polling()
@@ -148,5 +158,5 @@ updater.start_polling()
 # start - inizia il bot
 # registra_espe - registra un espe fatto oggi
 # registra_nota - registra una nota di un espe fatto
-# lista_nota - insights di questa settimana
-# genera_documento - genera il file word
+# insights - insights di questa settimana
+# invia_email - genera il file word

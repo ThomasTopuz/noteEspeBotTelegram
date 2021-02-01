@@ -73,3 +73,7 @@ def get_espe_ritornati(username):
 
 def get_week_number():
     return datetime.now().isocalendar()[1]
+
+
+def get_user_info(username):
+    return db.child(username).child('info').get().val()
