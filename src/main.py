@@ -1,7 +1,7 @@
 from telegram import *
 from telegram.ext import *
 import firebase as fb
-
+from wordGenerator import genera_docx
 bot_api = '1598156271:AAE_TTOleZ7mKUpwtzNIbm22WnqtRSZs-nk'
 bot = Bot(bot_api)
 print('running...')
@@ -116,6 +116,11 @@ def lista_note(update: Update, context: CallbackContext):
                      text=output, parse_mode=ParseMode.HTML)
 
 
+def generate_docx(update: Update, context: CallbackContext):
+    genera_docx(update.effective_chat.username)
+    bot.send_document(chat_id=update.effective_chat.id, document=open('file.docx', 'rb'))
+
+
 def format_data(data, props):
     output = ""
     for i in data:
@@ -134,6 +139,7 @@ dispatcher.add_handler(CommandHandler('start', start))
 dispatcher.add_handler(CommandHandler('insights', lista_note))
 dispatcher.add_handler(CommandHandler('registra_espe', espe_fatto_msg))
 dispatcher.add_handler(CommandHandler('registra_nota', registra_nota_msg))
+dispatcher.add_handler(CommandHandler('genera_documento', generate_docx))
 updater.dispatcher.add_handler(CallbackQueryHandler(inline_keyboard_handler))
 
 updater.start_polling()
