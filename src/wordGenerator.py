@@ -5,13 +5,18 @@ import os
 
 
 def genera_docx(username, fullname):
+    def get_week_day(n):
+        d = datetime.now().strftime("%Y") + "-W" + str(fb.get_week_number())
+        r = str(datetime.strptime(d + '-' + n, "%Y-W%W-%w"))
+        return r.split(" ", 1)[0]
+
     filename = "noteEspeSett" + str(datetime.now().isocalendar()[1]) + "_" + fullname + ".docx"
-    print(filename)
     doc = docx.Document("file.docx")
     # creazione heading
     doc.paragraphs[9].text = fullname
     doc.paragraphs[12].text = datetime.now().strftime("%m/%d/%Y")
-    doc.paragraphs[16].text = "Settimana dal X al Y"
+
+    doc.paragraphs[16].text = "Settimana dal " + get_week_day("1") + " al " + get_week_day("5")
 
     # ESPE FATTI
     # creazione tabella

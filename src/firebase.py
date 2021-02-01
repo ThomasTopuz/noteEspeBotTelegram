@@ -12,7 +12,6 @@ fireBaseConfig = {
 }
 
 firebase = pyrebase.initialize_app(fireBaseConfig)
-auth = firebase.auth()
 db = firebase.database()
 
 
@@ -29,20 +28,19 @@ def push_espe_fatto(materia, username):
     db.child(username).child('espe').push(data)
 
 
-# calcola la media
-def calcola_media(materia, username, nuova_nota):
-    espe_fatti = db.child(username).child('espe').order_by_child('materia').equal_to(materia).get().val()
-    count = float(len(espe_fatti) + 1)
-    sum_note = float(nuova_nota)
-    for i in espe_fatti:
-        if espe_fatti[i]['nota'] != -1:
-            sum_note += float((espe_fatti[i]['nota']))
-        else:
-            count -= 1
-    return round(float(sum_note / count), 2)
-
-
 def add_nota(nota, espe_id, username):
+    # calcola la media
+    def calcola_media(materia, username, nuova_nota):
+        espe_fatti = db.child(username).child('espe').order_by_child('materia').equal_to(materia).get().val()
+        count = float(len(espe_fatti) + 1)
+        sum_note = float(nuova_nota)
+        for i in espe_fatti:
+            if espe_fatti[i]['nota'] != -1:
+                sum_note += float((espe_fatti[i]['nota']))
+            else:
+                count -= 1
+        return round(float(sum_note / count), 2)
+
     materia = db.child(username).child('espe').child(espe_id).get().val()['materia']
     media = calcola_media(materia, username, nota)
     db.child(username).child('espe').child(espe_id).update(
@@ -77,3 +75,5 @@ def get_week_number():
 
 def get_user_info(username):
     return db.child(username).child('info').get().val()
+
+

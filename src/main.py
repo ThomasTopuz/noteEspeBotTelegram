@@ -17,7 +17,7 @@ espe_id = ""
 
 materie = {
     'JoeKung': (
-        'm122', 'm226A', 'm226B', 'm153', 'm411', 'matematica', 'fisica', 'inglese', 'tedesco', 'italiano', 'storia'),
+        'm101', 'm226A', 'm226B', 'm153', 'm411', 'matematica', 'fisica', 'inglese', 'tedesco', 'italiano', 'storia'),
     'Thomastopuz': (
         'm122', 'm226A', 'm226B', 'm153', 'm411', 'matematica', 'fisica', 'inglese', 'tedesco', 'italiano', 'storia'),
 
