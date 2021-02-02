@@ -1,10 +1,11 @@
 from telegram import *
 from telegram.ext import *
-import firebase as fb
+from firebase import *
 from wordGenerator import *
 from send_email import send_email
+import os
 
-bot_api = '1598156271:AAE_TTOleZ7mKUpwtzNIbm22WnqtRSZs-nk'
+bot_api = os.environ['NOTEBOT_API']
 bot = Bot(bot_api)
 print('running...')
 
@@ -27,7 +28,7 @@ espe_ricevuto = {
 }
 
 materie = {
-    'JoeKung': (
+    'Ciao2333': (
         'm100', 'm101', 'm104', 'm114', 'm117', 'm123', 'm213', 'm214', 'm304', 'm305', 'm403', 'm404', 'm431', 'Fise',
         'Economia aziendale', 'matematica', 'fisica', 'inglese', 'tedesco', 'italiano', 'storia', 'economia e diritto'),
     'Thomastopuz': (
@@ -38,13 +39,13 @@ materie = {
         'm120', 'm133', 'm152', 'm306', 'm326', 'Fise', 'matematica', 'fisica', 'chimica', 'tedesco', 'italiano',
         'inglese'),
 
-    'Amandamarchetti': ('m150', 'm151', 'm155', 'm183', 'm242', 'matematica', 'fisica', 'chimica', 'tedesco'),
+    'xamyzi': ('m150', 'm151', 'm155', 'm183', 'm242', 'matematica', 'fisica', 'chimica', 'tedesco'),
 }
 
 
 def start(update: Update, context: CallbackContext):
     username = update.effective_chat.username
-    update.message.reply_text("Benvenuto " + fb.get_user_info(username)[
+    update.message.reply_text("Benvenuto " + get_user_info(username)[
         'fullname'] + ", sono un bot per gestire le note dei tuoi espe settimanali! " +
                               "usa / per inserire un comando.")
 
@@ -62,7 +63,7 @@ def nuovo_espe(update: Update, context: CallbackContext):
 
 def registra_nota(update: Update, context: CallbackContext):
     username = update.effective_chat.username
-    espe_senza_nota = fb.get_espe_senza_nota(username)
+    espe_senza_nota = get_espe_senza_nota(username)
     if len(espe_senza_nota.val()) == 0:
         update.message.reply_text("Non hai più note da registrare.")
         return
@@ -111,19 +112,19 @@ def user_text_input_handler(update: Update, context: CallbackContext):
         global espe_fatto
         espe_fatto['osservazioni'] = user_input
         espe_fatto['username'] = username
-        fb.push_espe_fatto(espe_fatto)
+        push_espe_fatto(espe_fatto)
         update.message.reply_text("Espe registrato con successo!")
     elif mod == "OSSERVAZIONI_RICEVUTO":
         # global espe_ricevuto
         espe_ricevuto['osservazioni'] = user_input
-        fb.add_nota(espe_ricevuto)
+        add_nota(espe_ricevuto)
         update.message.reply_text("Nota registrata con successo!")
 
 
 def insights(update: Update, context: CallbackContext):
     username = update.effective_chat.username
-    espe_fatti = fb.get_espe_fatti(username)
-    espe_ritornati = fb.get_espe_ritornati(username)
+    espe_fatti = get_espe_fatti(username)
+    espe_ritornati = get_espe_ritornati(username)
     output = "PANORAMICA SETTIMANALE: \n \n \n"
     output += "ESPE CHE HAI FATTO: \n \n" if len(espe_fatti.val()) > 0 else "0 ESPE FATTI \n \n"
     output += format_data(espe_fatti, ["data", "materia"])
@@ -134,10 +135,10 @@ def insights(update: Update, context: CallbackContext):
 
 def generate_docx_and_send_email(update: Update, context: CallbackContext):
     username = update.effective_chat.username
-    fullname = fb.get_user_info(username)['fullname']
+    fullname = get_user_info(username)['fullname']
     filename = genera_docx(username, fullname)
     bot.send_document(chat_id=update.effective_chat.id, document=open(filename, 'rb'))
-    send_email(fullname, filename, fb.get_user_info(username)['email'])
+    send_email(fullname, filename, get_user_info(username)['email'])
     update.message.reply_text("La email è stata inviata sia a te che a Steve, buon week end!")
     elimina_file(filename)
 
@@ -168,7 +169,7 @@ updater.start_polling()
 
 # COMANDI BOTFAHTER
 # start - inizia il bot
-# registra_espe - registra un espe fatto oggi
+# nuovo_espe - registra un espe fatto oggi
 # registra_nota - registra una nota di un espe fatto
 # insights - insights di questa settimana
 # invia_email - genera il file word

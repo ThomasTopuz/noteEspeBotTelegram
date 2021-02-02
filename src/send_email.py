@@ -8,7 +8,6 @@ from email import encoders
 
 
 def send_email(fullname, filename, email_adress):
-    os.environ['GMAIL'] = "eqmhqfeyeiyimgub"
     fromaddr = 'noteespebot@gmail.com'
 
     msg = MIMEMultipart()
@@ -32,7 +31,7 @@ def send_email(fullname, filename, email_adress):
     server = smtplib.SMTP('smtp.gmail.com:587')
     server.ehlo()
     server.starttls()
-    server.login(fromaddr, os.environ['GMAIL'])
+    server.login(fromaddr, os.environ['NOTEBOT_GMAIL_PASSWORD'])
     server.sendmail(fromaddr, email_adress, msg)
     server.sendmail(fromaddr, "stevepostaFooBAr@gmail.com", msg)
     server.quit()

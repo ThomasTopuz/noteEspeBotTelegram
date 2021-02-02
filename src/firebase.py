@@ -1,14 +1,15 @@
 import pyrebase
 from datetime import datetime
+import os
 
 fireBaseConfig = {
-    'apiKey': "AIzaSyD1XfInWrTrS3RpmCQzqNJJu-jiHH8Ores",
-    'authDomain': "noteespebot.firebaseapp.com",
+    'apiKey': os.environ['NOTEBOT_FIREBASECONFIG_APIKEY'],
+    'authDomain': os.environ['NOTEBOT_FIREBASECONFIG_AUTHDOMAIN'],
     'projectId': "noteespebot",
-    'storageBucket': "noteespebot.appspot.com",
-    'messagingSenderId': "298424559882",
-    'appId': "1:298424559882:web:579508cdcd81fea1faf2f3",
-    "databaseURL": "https://noteespebot-default-rtdb.firebaseio.com/"
+    'storageBucket': os.environ['NOTEBOT_FIREBASECONFIG_STORAGEBUCKET'],
+    'messagingSenderId': os.environ['NOTEBOT_FIREBASECONFIG_MESSAGINGSENDERID'],
+    'appId': os.environ['NOTEBOT_FIREBASECONFIG_APPID'],
+    "databaseURL": os.environ['NOTEBOT_FIREBASECONFIG_DATABASEURL']
 }
 
 firebase = pyrebase.initialize_app(fireBaseConfig)
