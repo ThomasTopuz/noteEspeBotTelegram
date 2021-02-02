@@ -15,20 +15,21 @@ firebase = pyrebase.initialize_app(fireBaseConfig)
 db = firebase.database()
 
 
-def push_espe_fatto(materia, username):
+def push_espe_fatto(espe_fatto):
     now = datetime.now()
     data = {
         'data': now.strftime("%m/%d/%Y"),
-        'materia': materia,
+        'materia': espe_fatto['materia'],
         'nota': -1,
         "media": -1,
+        "osservazioni_fatto": espe_fatto['osservazioni'],
         'week_number': get_week_number(),
         'week_number_ricevuto': -1
     }
-    db.child(username).child('espe').push(data)
+    db.child(espe_fatto['username']).child('espe').push(data)
 
 
-def add_nota(nota, espe_id, username):
+def add_nota(espe_ricevuto):
     # calcola la media
     def calcola_media(materia, username, nuova_nota):
         espe_fatti = db.child(username).child('espe').order_by_child('materia').equal_to(materia).get().val()
@@ -41,13 +42,17 @@ def add_nota(nota, espe_id, username):
                 count -= 1
         return round(float(sum_note / count), 2)
 
+    username = espe_ricevuto['username']
+    nota = espe_ricevuto['nota']
+    espe_id = espe_ricevuto['espe_id']
     materia = db.child(username).child('espe').child(espe_id).get().val()['materia']
     media = calcola_media(materia, username, nota)
     db.child(username).child('espe').child(espe_id).update(
         {
             "nota": nota,
             "media": media,
-            'week_number_ricevuto': get_week_number()
+            'week_number_ricevuto': get_week_number(),
+            'osservazioni_ricevuto': espe_ricevuto['osservazioni']
         }
     )
 
@@ -75,5 +80,3 @@ def get_week_number():
 
 def get_user_info(username):
     return db.child(username).child('info').get().val()
-
-

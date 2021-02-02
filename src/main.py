@@ -13,7 +13,18 @@ dispatcher: Dispatcher = updater.dispatcher
 
 # global vars
 mod = ""
-espe_id = ""
+
+espe_fatto = {
+    'materia': '',
+    'osservazioni': '',
+    'username': ''
+}
+espe_ricevuto = {
+    'espe_id': '',
+    'nota': '',
+    'osservazioni': '',
+    'username': ''
+}
 
 materie = {
     'JoeKung': (
@@ -31,16 +42,12 @@ materie = {
 
 def start(update: Update, context: CallbackContext):
     username = update.effective_chat.username
-    bot.send_message(
-        chat_id=update.effective_chat.id,
-        text="Benvenuto " + fb.get_user_info(username)[
-            'fullname'] + ", sono un bot per gestire le note dei tuoi espe settimanali! " +
-             "usa / per inserire un comando.",
-        parse_mode=ParseMode.HTML
-    )
+    update.message.reply_text("Benvenuto " + fb.get_user_info(username)[
+        'fullname'] + ", sono un bot per gestire le note dei tuoi espe settimanali! " +
+                              "usa / per inserire un comando.")
 
 
-def espe_fatto_msg(update: Update, context: CallbackContext):
+def nuovo_espe(update: Update, context: CallbackContext):
     username = update.effective_chat.username
     keyboard = [
         [InlineKeyboardButton(i, callback_data=i)] for i in materie[username]
@@ -51,15 +58,11 @@ def espe_fatto_msg(update: Update, context: CallbackContext):
     mod = "ESPE"
 
 
-def registra_nota_msg(update: Update, context: CallbackContext):
+def registra_nota(update: Update, context: CallbackContext):
     username = update.effective_chat.username
     espe_senza_nota = fb.get_espe_senza_nota(username)
     if len(espe_senza_nota.val()) == 0:
-        bot.send_message(
-            chat_id=update.effective_chat.id,
-            text="Non hai più note da registrare.",
-            parse_mode=ParseMode.HTML
-        )
+        update.message.reply_text("Non hai più note da registrare.")
         return
     keyboard = [
         [InlineKeyboardButton(str(espe_senza_nota.val()[i]['materia'] + "  |  " + espe_senza_nota.val()[i]['data']),
@@ -78,33 +81,41 @@ def inline_keyboard_handler(update: Update, context: CallbackContext):
     # scelta della materia dell espe fatto
     global mod
     if mod == "ESPE":
-        materia = update.callback_query.data
-        fb.push_espe_fatto(materia, username)
-        update.callback_query.edit_message_text("Espe registrato con successo!")
-        mod = ""
+        global espe_fatto
+        espe_fatto['materia'] = update.callback_query.data
+        update.callback_query.edit_message_text("Adesso inserisci un osservazione:")
+        mod = "OSSERVAZIONI_FATTO"
     # scelta dell espe (materia e data) di cui si ha ricevuto la nota
     elif mod == "NOTA":
         query = update.callback_query
-        global espe_id
-        espe_id = query.data
+        global espe_ricevuto
+        espe_ricevuto['espe_id'] = query.data
+        espe_ricevuto['username'] = username
         query.edit_message_text("Inserisci la nota che hai preso di questo test.")
 
 
-def user_input_handler(update: Update, context: CallbackContext):
+def user_text_input_handler(update: Update, context: CallbackContext):
     username = update.effective_chat.username
     user_input = update.message.text.lower()
     global mod
+    global espe_ricevuto
     if mod == "NOTA":
         nota = user_input
-        global espe_id
-        fb.add_nota(nota, espe_id, username)
-        bot.send_message(
-            chat_id=update.effective_chat.id,
-            text="Nota registrata con successo!",
-            parse_mode=ParseMode.HTML
-        )
-        mod = ""
-        espe_id = ""
+        # global espe_ricevuto
+        espe_ricevuto['nota'] = nota
+        update.message.reply_text("Inserisci una osservazione:")
+        mod = "OSSERVAZIONI_RICEVUTO"
+    elif mod == "OSSERVAZIONI_FATTO":
+        global espe_fatto
+        espe_fatto['osservazioni'] = user_input
+        espe_fatto['username'] = username
+        fb.push_espe_fatto(espe_fatto)
+        update.message.reply_text("Espe registrato con successo!")
+    elif mod == "OSSERVAZIONI_RICEVUTO":
+        # global espe_ricevuto
+        espe_ricevuto['osservazioni'] = user_input
+        fb.add_nota(espe_ricevuto)
+        update.message.reply_text("Nota registrata con successo!")
 
 
 def insights(update: Update, context: CallbackContext):
@@ -116,9 +127,7 @@ def insights(update: Update, context: CallbackContext):
     output += format_data(espe_fatti, ["data", "materia"])
     output += "ESPE CHE HAI RICEVUTO: \n \n" if len(espe_ritornati.val()) > 0 else "0 ESPE RITORNATI"
     output += format_data(espe_ritornati, ["data", "materia", "nota"])
-
-    bot.send_message(chat_id=update.effective_chat.id,
-                     text=output, parse_mode=ParseMode.HTML)
+    update.message.reply_text(output)
 
 
 def generate_docx_and_send_email(update: Update, context: CallbackContext):
@@ -144,13 +153,14 @@ def format_data(data, props):
     return output
 
 
-dispatcher.add_handler(MessageHandler(Filters.text & ~Filters.command, user_input_handler))
 dispatcher.add_handler(CommandHandler('start', start))
+dispatcher.add_handler(CommandHandler('nuovo_espe', nuovo_espe))
+dispatcher.add_handler(CommandHandler('registra_nota', registra_nota))
 dispatcher.add_handler(CommandHandler('insights', insights))
-dispatcher.add_handler(CommandHandler('nuovo_espe', espe_fatto_msg))
-dispatcher.add_handler(CommandHandler('registra_nota', registra_nota_msg))
 dispatcher.add_handler(CommandHandler('invia_email', generate_docx_and_send_email))
-updater.dispatcher.add_handler(CallbackQueryHandler(inline_keyboard_handler))
+
+dispatcher.add_handler(CallbackQueryHandler(inline_keyboard_handler))
+dispatcher.add_handler(MessageHandler(Filters.text & ~Filters.command, user_text_input_handler))
 
 updater.start_polling()
 

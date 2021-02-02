@@ -34,7 +34,7 @@ def genera_docx(username, fullname):
         cells = table_fatti.add_row().cells
         cells[0].text = espe_fatto['data']
         cells[1].text = espe_fatto['materia']
-        cells[2].text = ""
+        cells[2].text = espe_fatto['osservazioni_fatto']
 
     doc.add_paragraph()
     doc.add_paragraph()
@@ -59,7 +59,7 @@ def genera_docx(username, fullname):
         cells[1].text = espe_ritornato['materia']
         cells[2].text = espe_ritornato['nota']
         cells[3].text = str(espe_ritornato['media'])
-        cells[4].text = ""
+        cells[4].text = espe_ritornato['osservazioni_ricevuto']
 
     # FOOTER
     footer = doc.sections[0].footer
