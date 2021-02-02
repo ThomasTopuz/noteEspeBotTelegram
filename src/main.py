@@ -28,9 +28,11 @@ espe_ricevuto = {
 
 materie = {
     'JoeKung': (
-        'm101', 'm226A', 'm226B', 'm153', 'm411', 'matematica', 'fisica', 'inglese', 'tedesco', 'italiano', 'storia'),
+        'm100', 'm101', 'm104', 'm114', 'm117', 'm123', 'm213', 'm214', 'm304', 'm305', 'm403', 'm404', 'm431', 'Fise',
+        'Economia aziendale', 'matematica', 'fisica', 'inglese', 'tedesco', 'italiano', 'storia', 'economia e diritto'),
     'Thomastopuz': (
-        'm122', 'm226A', 'm226B', 'm153', 'm411', 'matematica', 'fisica', 'inglese', 'tedesco', 'italiano', 'storia'),
+        'm122', 'm226A', 'm226B', 'm153', 'm411', 'economia aziendale', 'matematica', 'fisica', 'inglese', 'tedesco',
+        'italiano', 'storia', 'economia e diritto'),
 
     'EmilijaDaceva': (
         'm120', 'm133', 'm152', 'm306', 'm326', 'Fise', 'matematica', 'fisica', 'chimica', 'tedesco', 'italiano',
