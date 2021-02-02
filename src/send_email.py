@@ -14,7 +14,7 @@ def send_email(fullname, filename, email_adress):
     msg['From'] = fromaddr
     msg['To'] = email_adress
     msg['Subject'] = "NoteEspeSett" + str(datetime.now().isocalendar()[1]) + " - di " + fullname + "."
-    body = 'Ciao Steve, ecco note di questa settimana di ' + fullname + "\n Buon week end \n NoteEspeBot"
+    body = 'Ciao Steve, ecco note di questa settimana di ' + fullname + "\n\n\nBuon week end \nNoteEspeBot"
     msg.attach(MIMEText(body))
     files = [filename]
 
