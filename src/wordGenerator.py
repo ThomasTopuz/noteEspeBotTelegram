@@ -14,7 +14,7 @@ def genera_docx(username, fullname):
     doc = docx.Document("file.docx")
     # creazione heading
     doc.paragraphs[9].text = fullname
-    doc.paragraphs[12].text = datetime.now().strftime("%m/%d/%Y")
+    doc.paragraphs[12].text = datetime.now().strftime("%d.%m.%Y")
 
     doc.paragraphs[16].text = "Settimana dal " + get_week_day("1") + " al " + get_week_day("5")
 

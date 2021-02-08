@@ -27,21 +27,6 @@ espe_ricevuto = {
     'username': ''
 }
 
-materie = {
-    'joekueng': (
-        'm100', 'm101', 'm104', 'm114', 'm117', 'm123', 'm213', 'm214', 'm304', 'm305', 'm403', 'm404', 'm431', 'Fise',
-        'Economia aziendale', 'matematica', 'fisica', 'inglese', 'tedesco', 'italiano', 'storia', 'economia e diritto'),
-    'Thomastopuz': (
-        'm122', 'm226A', 'm226B', 'm153', 'm411', 'economia aziendale', 'matematica', 'fisica', 'inglese', 'tedesco',
-        'italiano', 'storia', 'economia e diritto'),
-
-    'emmdac': (
-        'm120', 'm133', 'm152', 'm306', 'm326', 'Fise', 'matematica', 'fisica', 'chimica', 'tedesco', 'italiano',
-        'inglese'),
-
-    'xamyzi': ('m150', 'm151', 'm155', 'm183', 'm242', 'matematica', 'fisica', 'chimica', 'tedesco'),
-}
-
 
 def start(update: Update, context: CallbackContext):
     username = update.effective_chat.username
@@ -52,8 +37,12 @@ def start(update: Update, context: CallbackContext):
 
 def nuovo_espe(update: Update, context: CallbackContext):
     username = update.effective_chat.username
+    anno = get_user_info(username)['anno']
+    print(anno)
+    materie = get_materie_by_anno(anno)
+
     keyboard = [
-        [InlineKeyboardButton(i, callback_data=i)] for i in materie[username]
+        [InlineKeyboardButton(i, callback_data=i)] for i in materie
     ]
     reply_markup = InlineKeyboardMarkup(keyboard)
     update.message.reply_text("Scegli la materia dell'espe che hai fatto oggi!", reply_markup=reply_markup)

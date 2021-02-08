@@ -2,6 +2,7 @@ import pyrebase
 from datetime import datetime
 import os
 
+
 fireBaseConfig = {
     'apiKey': os.environ['NOTEBOT_FIREBASECONFIG_APIKEY'],
     'authDomain': os.environ['NOTEBOT_FIREBASECONFIG_AUTHDOMAIN'],
@@ -19,7 +20,7 @@ db = firebase.database()
 def push_espe_fatto(espe_fatto):
     now = datetime.now()
     data = {
-        'data': now.strftime("%m/%d/%Y"),
+        'data': now.strftime("%d.%m.%Y"),
         'materia': espe_fatto['materia'],
         'nota': -1,
         "media": -1,
@@ -81,3 +82,9 @@ def get_week_number():
 
 def get_user_info(username):
     return db.child(username).child('info').get().val()
+
+
+def get_materie_by_anno(anno):
+    return db.child("materia").child(anno).get().val().split(';')
+
+
