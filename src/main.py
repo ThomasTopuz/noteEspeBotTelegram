@@ -38,7 +38,6 @@ def start(update: Update, context: CallbackContext):
 def nuovo_espe(update: Update, context: CallbackContext):
     username = update.effective_chat.username
     anno = get_user_info(username)['anno']
-    print(anno)
     materie = get_materie_by_anno(anno)
 
     keyboard = [

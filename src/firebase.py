@@ -1,19 +1,18 @@
 import pyrebase
 from datetime import datetime
-import os
+from string_cryptography import *
 
-
-fireBaseConfig = {
-    'apiKey': os.environ['NOTEBOT_FIREBASECONFIG_APIKEY'],
-    'authDomain': os.environ['NOTEBOT_FIREBASECONFIG_AUTHDOMAIN'],
+firebaseConfig = {
+    'apiKey': "AIzaSyD1XfInWrTrS3RpmCQzqNJJu-jiHH8Ores",
+    'authDomain': "noteespebot.firebaseapp.com",
+    'databaseURL': "https://noteespebot-default-rtdb.firebaseio.com",
     'projectId': "noteespebot",
-    'storageBucket': os.environ['NOTEBOT_FIREBASECONFIG_STORAGEBUCKET'],
-    'messagingSenderId': os.environ['NOTEBOT_FIREBASECONFIG_MESSAGINGSENDERID'],
-    'appId': os.environ['NOTEBOT_FIREBASECONFIG_APPID'],
-    "databaseURL": os.environ['NOTEBOT_FIREBASECONFIG_DATABASEURL']
+    'storageBucket': "noteespebot.appspot.com",
+    'messagingSenderId': "298424559882",
+    'appId': "1:298424559882:web:579508cdcd81fea1faf2f3"
 }
 
-firebase = pyrebase.initialize_app(fireBaseConfig)
+firebase = pyrebase.initialize_app(firebaseConfig)
 db = firebase.database()
 
 
@@ -34,7 +33,8 @@ def push_espe_fatto(espe_fatto):
 def add_nota(espe_ricevuto):
     # calcola la media
     def calcola_media(materia, username, nuova_nota):
-        espe_fatti = db.child(username).child('espe').order_by_child('materia').equal_to(materia).get().val()
+        espe_fatti = db.child(username).child('espe').order_by_child(
+            'materia').equal_to(materia).get().val()
         count = float(len(espe_fatti) + 1)
         sum_note = float(nuova_nota)
         for i in espe_fatti:
@@ -47,7 +47,8 @@ def add_nota(espe_ricevuto):
     username = espe_ricevuto['username']
     nota = espe_ricevuto['nota']
     espe_id = espe_ricevuto['espe_id']
-    materia = db.child(username).child('espe').child(espe_id).get().val()['materia']
+    materia = db.child(username).child(
+        'espe').child(espe_id).get().val()['materia']
     media = calcola_media(materia, username, nota)
     db.child(username).child('espe').child(espe_id).update(
         {
@@ -86,5 +87,3 @@ def get_user_info(username):
 
 def get_materie_by_anno(anno):
     return db.child("materia").child(anno).get().val().split(';')
-
-
