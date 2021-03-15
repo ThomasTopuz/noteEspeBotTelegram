@@ -1,16 +1,7 @@
 import pyrebase
 from datetime import datetime
-from string_cryptography import *
-
-firebaseConfig = {
-    'apiKey': "AIzaSyD1XfInWrTrS3RpmCQzqNJJu-jiHH8Ores",
-    'authDomain': "noteespebot.firebaseapp.com",
-    'databaseURL': "https://noteespebot-default-rtdb.firebaseio.com",
-    'projectId': "noteespebot",
-    'storageBucket': "noteespebot.appspot.com",
-    'messagingSenderId': "298424559882",
-    'appId': "1:298424559882:web:579508cdcd81fea1faf2f3"
-}
+from firebaseConfig import firebaseConfig;
+from encrypter import *
 
 firebase = pyrebase.initialize_app(firebaseConfig)
 db = firebase.database()
@@ -23,7 +14,7 @@ def push_espe_fatto(espe_fatto):
         'materia': espe_fatto['materia'],
         'nota': -1,
         "media": -1,
-        "osservazioni_fatto": espe_fatto['osservazioni'],
+        "osservazioni_fatto": encrypt(espe_fatto['osservazioni']),
         'week_number': get_week_number(),
         'week_number_ricevuto': -1
     }
@@ -38,8 +29,8 @@ def add_nota(espe_ricevuto):
         count = float(len(espe_fatti) + 1)
         sum_note = float(nuova_nota)
         for i in espe_fatti:
-            if espe_fatti[i]['nota'] != -1:
-                sum_note += float((espe_fatti[i]['nota']))
+            if (espe_fatti[i]['nota']) != -1:
+                sum_note += float(decrypt(str((espe_fatti[i]['nota']))))
             else:
                 count -= 1
         return round(float(sum_note / count), 2)
@@ -52,10 +43,10 @@ def add_nota(espe_ricevuto):
     media = calcola_media(materia, username, nota)
     db.child(username).child('espe').child(espe_id).update(
         {
-            "nota": nota,
-            "media": media,
+            "nota": encrypt(str(nota)),
+            "media": encrypt(str(media)),
             'week_number_ricevuto': get_week_number(),
-            'osservazioni_ricevuto': espe_ricevuto['osservazioni']
+            'osservazioni_ricevuto': encrypt(espe_ricevuto['osservazioni'])
         }
     )
 
@@ -77,6 +68,7 @@ def get_espe_ritornati(username):
     return db.child(username).child('espe').order_by_child('week_number_ricevuto').equal_to(get_week_number()).get()
 
 
+# utility functions
 def get_week_number():
     return datetime.now().isocalendar()[1]
 

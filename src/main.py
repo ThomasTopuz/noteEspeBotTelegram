@@ -5,7 +5,7 @@ from wordGenerator import *
 from send_email import send_email
 import os
 
-bot_api = os.environ['NOTEBOT_API']
+bot_api = os.environ['NOTEBOT_API'];
 bot = Bot(bot_api)
 print('running...')
 
