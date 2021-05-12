@@ -1,8 +1,8 @@
 import docx
 from datetime import datetime
-import firebase as fb
+import src.firebase.firebase as fb
 import os
-from encrypter import *
+from src.cryptography.encrypter import *
 
 
 def genera_docx(username, fullname):

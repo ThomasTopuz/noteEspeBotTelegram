@@ -1,13 +1,13 @@
 from telegram import *
 from telegram.ext import *
-from firebase import *
-from wordGenerator import *
+from firebase.firebase import *
+from src.docx.wordGenerator import *
 from send_email import send_email
 import os
 
 bot_api = os.environ['NOTEBOT_API'];
 bot = Bot(bot_api)
-print('running...')
+print('NoteEspeBot running')
 
 updater = Updater(bot_api, use_context=True)
 dispatcher: Dispatcher = updater.dispatcher
@@ -137,7 +137,10 @@ def format_data(data, props):
         espe = i.val()
         props_value = []
         for j in props:
-            props_value.append(str(espe[j]))
+            if j == "nota":
+                props_value.append(decrypt(str(espe[j])))
+            else:
+                props_value.append(str(espe[j]))
         output += "  -  ".join(props_value)
         output += "\n"
     output += "\n\n\n"

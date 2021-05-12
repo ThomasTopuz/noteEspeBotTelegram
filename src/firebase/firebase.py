@@ -1,7 +1,7 @@
 import pyrebase
 from datetime import datetime
-from firebaseConfig import firebaseConfig;
-from encrypter import *
+from src.firebase.firebaseConfig import firebaseConfig
+from src.cryptography.encrypter import encrypt, decrypt
 
 firebase = pyrebase.initialize_app(firebaseConfig)
 db = firebase.database()

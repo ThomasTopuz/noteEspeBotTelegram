@@ -1,4 +1,4 @@
-from cryptography.fernet import *
+from cryptography.fernet import Fernet
 
 
 def _generate_key():
@@ -8,7 +8,12 @@ def _generate_key():
 
 
 def _call_key():
-    return open("pass.key", "rb").read()
+    try:
+        return open("pass.key", "rb").read()
+    except FileNotFoundError:
+        _generate_key()
+        print("pass.key regenerated!")
+        return open("pass.key", "rb").read()
 
 
 def encrypt(slogan):
@@ -24,6 +29,5 @@ def decrypt(coded_slogan):
     fernet = Fernet(key)
     decoded_slogan = fernet.decrypt(bytes(coded_slogan, "utf-8")).decode()
     return decoded_slogan
-
 
 # _generate_key() to generate a new key
