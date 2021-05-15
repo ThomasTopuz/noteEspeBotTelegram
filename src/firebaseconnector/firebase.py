@@ -16,47 +16,47 @@ db = firebase.database()
 
 
 # push a test to firebase realtime database
-def push_espe_fatto(espe_fatto):
+def push_test_done(test_done):
     now = datetime.now()
     data = {
         'data': now.strftime("%d.%m.%Y"),
-        'materia': espe_fatto['materia'],
+        'materia': test_done['subject'],
         'nota': -1,
         "media": -1,
-        "osservazioni_fatto": encrypt(espe_fatto['osservazioni']),
+        "osservazioni_fatto": encrypt(test_done['observation']),
         'week_number': get_week_number(),
         'week_number_ricevuto': -1
     }
-    db.child(espe_fatto['username']).child('espe').push(data)
+    db.child(test_done['username']).child('espe').push(data)
 
 
 # set the grade and calculate average for a given test
-def add_nota(espe_ricevuto):
+def set_grade(test_received):
     # calculate average grade for a school subject
-    def calcola_media(materia, username, nuova_nota):
-        espe_fatti = db.child(username).child('espe').order_by_child(
-            'materia').equal_to(materia).get().val()
-        count = float(len(espe_fatti) + 1)
-        sum_note = float(nuova_nota)
-        for i in espe_fatti:
-            if (espe_fatti[i]['nota']) != -1:
-                sum_note += float(decrypt(str((espe_fatti[i]['nota']))))
+    def calculate_average(subject, username, new_grade):
+        tests_done = db.child(username).child('espe').order_by_child(
+            'materia').equal_to(subject).get().val()
+        count = float(len(tests_done) + 1)
+        sum_grade = float(new_grade)
+        for i in tests_done:
+            if (tests_done[i]['nota']) != -1:
+                sum_grade += float(decrypt(str((tests_done[i]['nota']))))
             else:
                 count -= 1
-        return round(float(sum_note / count), 2)
+        return round(float(sum_grade / count), 2)
 
-    username = espe_ricevuto['username']
-    nota = espe_ricevuto['nota']
-    espe_id = espe_ricevuto['espe_id']
-    materia = db.child(username).child(
-        'espe').child(espe_id).get().val()['materia']
-    media = calcola_media(materia, username, nota)
-    db.child(username).child('espe').child(espe_id).update(
+    username = test_received['username']
+    grade = test_received['grade']
+    test_id = test_received['test_id']
+    subject = db.child(username).child(
+        'espe').child(test_id).get().val()['materia']
+    media = calculate_average(subject, username, grade)
+    db.child(username).child('espe').child(test_id).update(
         {
-            "nota": encrypt(str(nota)),
+            "nota": encrypt(str(grade)),
             "media": encrypt(str(media)),
             'week_number_ricevuto': get_week_number(),
-            'osservazioni_ricevuto': encrypt(espe_ricevuto['osservazioni'])
+            'osservazioni_ricevuto': encrypt(test_received['observation'])
         }
     )
 
@@ -64,18 +64,18 @@ def add_nota(espe_ricevuto):
 # GETTERS
 
 # get all test without a grade (unset)
-def get_espe_senza_nota(username):
+def get_test_without_grade(username):
     return db.child(username).child('espe').order_by_child('nota').equal_to(-1).get()
 
 
 # get the test made the current week
-def get_espe_fatti(username):
+def get_tests_done(username):
     return db.child(username).child('espe').order_by_child('week_number') \
         .equal_to(get_week_number()).get()
 
 
-# espe ritornati la settimana corrente
-def get_espe_ritornati(username):
+# get tests received the current week
+def get_test_received_curr_week(username):
     return db.child(username).child('espe').order_by_child('week_number_ricevuto').equal_to(get_week_number()).get()
 
 
@@ -92,5 +92,5 @@ def get_user_info(username):
 
 
 # get school subject for a given year
-def get_materie_by_anno(anno):
+def get_subjects_by_year(anno):
     return db.child("materie").child(anno).get().val().split(';')

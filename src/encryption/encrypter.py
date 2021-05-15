@@ -40,5 +40,4 @@ def decrypt(coded_slogan):
     decoded_slogan = fernet.decrypt(bytes(coded_slogan, "utf-8")).decode()
     return decoded_slogan
 
-
 # _generate_key() to generate a new key
