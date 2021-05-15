@@ -1,26 +1,30 @@
-<h1>Progetto bot telegram noteEspe in python</h1>
+<h1>Progetto NoteEspeBot</h1>
   L'idea del progetto è di creare un bot telegram per automatizzare l'invio degli espe fatti e delle note ricevute al datore di lavoro.
   Ogni settimana in un file docx bisogna mettere gli espe fatti e quelli ricevuti.
-  Prevedo di espandere il progetto a più utenti, identificando l'utente tramite l'username di telegram
-  
-<h3>Hosting</h3>
-Per hostare il mio bot uso una vm di gcloud, come ssh client uso termius
-Usando una sessione tmux posso continuare a runnare il mio script anche con terminale chiuso
+  Prevedo di espandere il progetto a più utenti, identificando l'utente tramite l'username di telegram 
+
+<h3>Demo del progetto</h3>
+<img src="https://user-images.githubusercontent.com/49570615/118365545-7c9ba480-b59d-11eb-9e89-e91620cdd34d.PNG">
+
 
 <h3>Database</h3>
 Come database userò il realtime database di firebase e lo organizzo nel seguente modo:
-<img src = "https://github.com/ThomasTopuz/noteEspeBot/blob/master/media/Capsture.PNG?raw=true">
+<img src = "https://user-images.githubusercontent.com/49570615/118365475-39413600-b59d-11eb-81ac-339cba93958a.PNG">
 I dati che non ha ancora inserito l'utente verrano messi a -1.
 Quando l'utente vorra inserire la nota di un espe che ha ricevuto, su telegram appariranno tutti gli espe che non hanno ancora la nota,
 e con un click si può aggiungere la nota.
-
+<br>
+Per ricevere le materie di un utente ho strutturato una collection dove ad ogni anno scolastico corrispondono le materia che l'allievo ha.
+<img src = "https://user-images.githubusercontent.com/49570615/118365769-870a6e00-b59e-11eb-952f-274c6e7c8206.PNG">
 
 <h3>Librerie</h3>
-- python-telegram-bot --> https://github.com/python-telegram-bot/python-telegram-bot
-- python-docx per generare ogni venerdi il file docx da inviare al datore di lavoro --> https://github.com/python-openxml/python-docx
-- prevedo anche di usare yagmail per inviare la email al datore, allegando il docx --> https://github.com/kootenpv/yagmail
-- pyrebase che mi permette di interfacciarmi con il mio realtime db --> https://github.com/thisbejim/Pyrebase
+<ul>
+<li>"python-telegram-bot" è una wrapper dell'api di telegram --> https://github.com/python-telegram-bot/python-telegram-bot</li>
+<li>"python-docx" il file docx da inviare al datore di lavoro --> https://github.com/python-openxml/python-docx</li>
+<li>"smtplib" per inviare la email al datore, allegando il docx --> https://docs.python.org/3/library/smtplib.html</li>
+<li>"Pyrebase4" mi permette di interfacciarmi con il mio realtime database di firebase --> https://github.com/thisbejim/Pyrebase</li>
+</ul>
 
-<h3>Demo del progetto</h3>
-
-<img src="https://github.com/ThomasTopuz/noteEspeBot/blob/master/media/Capture.PNG?raw=true">
+<h3>Hosting e Deploy</h3>
+Per hostare il mio bot uso una vm di contabo, come ssh client uso termius.
+Per il deploy ho pacchetizzato il bot in una immagine di docker, ho fatto il push su docker hub e ho fatto il pull dalla mia virtual machine, per finire ho eseguito la mia immagine.
