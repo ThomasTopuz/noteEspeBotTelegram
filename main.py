@@ -1,8 +1,8 @@
 from telegram import *
 from telegram.ext import *
-from firebase.firebase import *
-from src.docx.wordGenerator import *
-from send_email import send_email
+from src.firebaseconnector.firebase import *
+from src.documentGenerator.wordGenerator import *
+from src.emailservice.send_email import send_email
 import os
 
 bot_api = os.environ['NOTEBOT_API'];

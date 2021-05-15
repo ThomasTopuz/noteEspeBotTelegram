@@ -1,19 +1,24 @@
 from cryptography.fernet import Fernet
+import os
+
+
+def get_key_path():
+    return os.path.join(os.path.dirname(__file__), 'pass.key')
 
 
 def _generate_key():
     key = Fernet.generate_key()
-    with open("pass.key", "wb") as key_file:
+    with open(get_key_path(), "wb") as key_file:
         key_file.write(key)
 
 
 def _call_key():
     try:
-        return open("pass.key", "rb").read()
+        return open(get_key_path(), "rb").read()
     except FileNotFoundError:
         _generate_key()
         print("pass.key regenerated!")
-        return open("pass.key", "rb").read()
+        return open(get_key_path(), "rb").read()
 
 
 def encrypt(slogan):
@@ -29,5 +34,6 @@ def decrypt(coded_slogan):
     fernet = Fernet(key)
     decoded_slogan = fernet.decrypt(bytes(coded_slogan, "utf-8")).decode()
     return decoded_slogan
+
 
 # _generate_key() to generate a new key

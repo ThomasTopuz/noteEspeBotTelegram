@@ -1,9 +1,17 @@
 import pyrebase
 from datetime import datetime
-from src.firebase.firebaseConfig import firebaseConfig
-from src.cryptography.encrypter import encrypt, decrypt
+from . import firebaseConfig
+from src.encryption.encrypter import encrypt, decrypt
 
-firebase = pyrebase.initialize_app(firebaseConfig)
+firebase = pyrebase.initialize_app({
+    'apiKey': "AIzaSyD1XfInWrTrS3RpmCQzqNJJu-jiHH8Ores",
+    'authDomain': "noteespebot.firebaseapp.com",
+    'databaseURL': "https://noteespebot-default-rtdb.firebaseio.com",
+    'projectId': "noteespebot",
+    'storageBucket': "noteespebot.appspot.com",
+    'messagingSenderId': "298424559882",
+    'appId': "1:298424559882:web:579508cdcd81fea1faf2f3"
+})
 db = firebase.database()
 
 

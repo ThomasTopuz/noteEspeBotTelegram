@@ -1,8 +1,8 @@
 import docx
 from datetime import datetime
-import src.firebase.firebase as fb
+import src.firebaseconnector.firebase as fb
 import os
-from src.cryptography.encrypter import *
+from src.encryption.encrypter import *
 
 
 def genera_docx(username, fullname):
@@ -12,7 +12,7 @@ def genera_docx(username, fullname):
         return r.split(" ", 1)[0]
 
     filename = "noteEspeSett" + str(datetime.now().isocalendar()[1]) + "_" + fullname + ".docx"
-    doc = docx.Document("file.docx")
+    doc = docx.Document(os.path.join(os.path.dirname(__file__), 'template.docx'))
     # creazione heading
     doc.paragraphs[9].text = fullname
     doc.paragraphs[12].text = datetime.now().strftime("%d.%m.%Y")
