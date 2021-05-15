@@ -1,7 +1,6 @@
 import docx
 from datetime import datetime
 import src.firebaseconnector.firebase as fb
-import os
 from src.encryption.encrypter import *
 
 
