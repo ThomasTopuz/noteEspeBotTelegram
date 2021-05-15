@@ -14,10 +14,6 @@ I dati che non ha ancora inserito l'utente verrano messi a -1.
 Quando l'utente vorra inserire la nota di un espe che ha ricevuto, su telegram appariranno tutti gli espe che non hanno ancora la nota,
 e con un click si può aggiungere la nota.
 
-<h3>Hosting e Deploy</h3>
-Per hostare il mio bot uso una vm di contabo, come ssh client uso termius.
-Per il deploy ho pacchetizzato il bot in una immagine di docker, ho fatto il push su docker hub e ho fatto il pull dalla mia virtual machine, per finire ho eseguito la mia immagine.
-
 <h3>Librerie</h3>
 <ul>
 <li>"python-telegram-bot" è una wrapper dell'api di telegram --> https://github.com/python-telegram-bot/python-telegram-bot</li>
@@ -26,3 +22,6 @@ Per il deploy ho pacchetizzato il bot in una immagine di docker, ho fatto il pus
 <li>"Pyrebase4" mi permette di interfacciarmi con il mio realtime database di firebase --> https://github.com/thisbejim/Pyrebase</li>
 </ul>
 
+<h3>Hosting e Deploy</h3>
+Per hostare il mio bot uso una vm di contabo, come ssh client uso termius.
+Per il deploy ho pacchetizzato il bot in una immagine di docker, ho fatto il push su docker hub e ho fatto il pull dalla mia virtual machine, per finire ho eseguito la mia immagine.
