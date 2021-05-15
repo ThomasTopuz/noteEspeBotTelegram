@@ -14,6 +14,9 @@ I dati che non ha ancora inserito l'utente verrano messi a -1.
 Quando l'utente vorra inserire la nota di un espe che ha ricevuto, su telegram appariranno tutti gli espe che non hanno ancora la nota,
 e con un click si può aggiungere la nota.
 
+Per ricevere le materie di un utente ho strutturato una collection dove ad ogni anno scolastico corrispondono le materia che l'allievo ha.
+<img src = "https://user-images.githubusercontent.com/49570615/118365769-870a6e00-b59e-11eb-952f-274c6e7c8206.PNG">
+
 <h3>Librerie</h3>
 <ul>
 <li>"python-telegram-bot" è una wrapper dell'api di telegram --> https://github.com/python-telegram-bot/python-telegram-bot</li>
