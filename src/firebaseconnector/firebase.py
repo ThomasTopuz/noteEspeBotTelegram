@@ -86,4 +86,4 @@ def get_user_info(username):
 
 
 def get_materie_by_anno(anno):
-    return db.child("materia").child(anno).get().val().split(';')
+    return db.child("materie").child(anno).get().val().split(';')

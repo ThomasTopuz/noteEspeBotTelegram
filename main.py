@@ -92,6 +92,16 @@ def user_text_input_handler(update: Update, context: CallbackContext):
     global espe_ricevuto
     if mod == "NOTA":
         nota = user_input
+        try:
+            float(nota)
+        except ValueError:
+            update.message.reply_text("Per favore inserisci un compreso tra 1 e 6")
+            return
+
+        if float(nota) < 1 or float(nota) > 6:
+            update.message.reply_text("Per favore inserisci un compreso tra 1 e 6!")
+            return
+
         # global espe_ricevuto
         espe_ricevuto['nota'] = nota
         update.message.reply_text("Inserisci una osservazione:")
