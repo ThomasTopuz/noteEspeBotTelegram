@@ -19,9 +19,10 @@ Per hostare il mio bot uso una vm di contabo, come ssh client uso termius.
 Per il deploy ho pacchetizzato il bot in una immagine di docker, ho fatto il push su docker hub e ho fatto il pull dalla mia virtual machine, per finire ho eseguito la mia immagine.
 
 <h3>Librerie</h3>
-* "python-telegram-bot" è una wrapper dell'api di telegram --> https://github.com/python-telegram-bot/python-telegram-bot
-* "python-docx" il file docx da inviare al datore di lavoro --> https://github.com/python-openxml/python-docx
-* "smtplib" per inviare la email al datore, allegando il docx --> https://docs.python.org/3/library/smtplib.html
-* "Pyrebase4" mi permette di interfacciarmi con il mio realtime database di firebase --> https://github.com/thisbejim/Pyrebase
-
+<ul>
+<li>"python-telegram-bot" è una wrapper dell'api di telegram --> https://github.com/python-telegram-bot/python-telegram-bot</li>
+<li>"python-docx" il file docx da inviare al datore di lavoro --> https://github.com/python-openxml/python-docx</li>
+<li>"smtplib" per inviare la email al datore, allegando il docx --> https://docs.python.org/3/library/smtplib.html</li>
+<li>"Pyrebase4" mi permette di interfacciarmi con il mio realtime database di firebase --> https://github.com/thisbejim/Pyrebase</li>
+</ul>
 
