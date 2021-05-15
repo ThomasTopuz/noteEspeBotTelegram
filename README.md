@@ -4,12 +4,12 @@
   Prevedo di espandere il progetto a più utenti, identificando l'utente tramite l'username di telegram 
 
 <h3>Demo del progetto</h3>
-<img src="https://github.com/ThomasTopuz/noteEspeBot/blob/master/media/Capture.PNG?raw=true">
+<img src="https://user-images.githubusercontent.com/49570615/118365545-7c9ba480-b59d-11eb-9e89-e91620cdd34d.PNG">
 
 
 <h3>Database</h3>
 Come database userò il realtime database di firebase e lo organizzo nel seguente modo:
-<img src = "https://github.com/ThomasTopuz/noteEspeBot/blob/master/media/Capsture.PNG?raw=true">
+<img src = "https://user-images.githubusercontent.com/49570615/118365475-39413600-b59d-11eb-81ac-339cba93958a.PNG">
 I dati che non ha ancora inserito l'utente verrano messi a -1.
 Quando l'utente vorra inserire la nota di un espe che ha ricevuto, su telegram appariranno tutti gli espe che non hanno ancora la nota,
 e con un click si può aggiungere la nota.
