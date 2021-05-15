@@ -1,4 +1,4 @@
-<h1>Progetto bot telegram noteEspe in python</h1>
+<h1>Progetto NoteEspeBot</h1>
   L'idea del progetto è di creare un bot telegram per automatizzare l'invio degli espe fatti e delle note ricevute al datore di lavoro.
   Ogni settimana in un file docx bisogna mettere gli espe fatti e quelli ricevuti.
   Prevedo di espandere il progetto a più utenti, identificando l'utente tramite l'username di telegram 
