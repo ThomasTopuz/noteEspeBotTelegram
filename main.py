@@ -5,6 +5,7 @@ from src.documentGenerator.wordGenerator import *
 from src.emailservice.send_email import send_email
 import os
 
+# configure the bot
 bot_api = os.environ['NOTEBOT_API'];
 bot = Bot(bot_api)
 print('NoteEspeBot running')
@@ -12,7 +13,7 @@ print('NoteEspeBot running')
 updater = Updater(bot_api, use_context=True)
 dispatcher: Dispatcher = updater.dispatcher
 
-# global vars
+# global vars and objects
 mod = ""
 
 espe_fatto = {
@@ -28,6 +29,7 @@ espe_ricevuto = {
 }
 
 
+# start handler (when starting a new chat with the bot)
 def start(update: Update, context: CallbackContext):
     username = update.effective_chat.username
     update.message.reply_text("Benvenuto " + get_user_info(username)[
@@ -35,6 +37,7 @@ def start(update: Update, context: CallbackContext):
                               "usa / per inserire un comando.")
 
 
+# nuovo_espe command handler
 def nuovo_espe(update: Update, context: CallbackContext):
     username = update.effective_chat.username
     anno = get_user_info(username)['anno']
@@ -49,6 +52,7 @@ def nuovo_espe(update: Update, context: CallbackContext):
     mod = "ESPE"
 
 
+# registra_nota command handler
 def registra_nota(update: Update, context: CallbackContext):
     username = update.effective_chat.username
     espe_senza_nota = get_espe_senza_nota(username)
@@ -67,16 +71,18 @@ def registra_nota(update: Update, context: CallbackContext):
     mod = "NOTA"
 
 
+# handler for the list click event (when selecting a school subject or a past test)
+# acts differently depending on the mod (mode) variable
 def inline_keyboard_handler(update: Update, context: CallbackContext):
     username = update.effective_chat.username
-    # scelta della materia dell espe fatto
+    # choose the school subject to registrate a test for
     global mod
     if mod == "ESPE":
         global espe_fatto
         espe_fatto['materia'] = update.callback_query.data
         update.callback_query.edit_message_text("Adesso inserisci un osservazione:")
         mod = "OSSERVAZIONI_FATTO"
-    # scelta dell espe (materia e data) di cui si ha ricevuto la nota
+    # choose the test you want to set the grade
     elif mod == "NOTA":
         query = update.callback_query
         global espe_ricevuto
@@ -85,11 +91,13 @@ def inline_keyboard_handler(update: Update, context: CallbackContext):
         query.edit_message_text("Inserisci la nota che hai preso di questo test.")
 
 
+# generic user text input handler, acts differently depending on the mod variable
 def user_text_input_handler(update: Update, context: CallbackContext):
     username = update.effective_chat.username
     user_input = update.message.text.lower()
     global mod
     global espe_ricevuto
+    # grade input
     if mod == "NOTA":
         nota = user_input
         try:
@@ -106,12 +114,14 @@ def user_text_input_handler(update: Update, context: CallbackContext):
         espe_ricevuto['nota'] = nota
         update.message.reply_text("Inserisci una osservazione:")
         mod = "OSSERVAZIONI_RICEVUTO"
+    # observation input (when test register)
     elif mod == "OSSERVAZIONI_FATTO":
         global espe_fatto
         espe_fatto['osservazioni'] = user_input
         espe_fatto['username'] = username
         push_espe_fatto(espe_fatto)
         update.message.reply_text("Espe registrato con successo!")
+    # observation input (when test received)
     elif mod == "OSSERVAZIONI_RICEVUTO":
         # global espe_ricevuto
         espe_ricevuto['osservazioni'] = user_input
@@ -119,6 +129,7 @@ def user_text_input_handler(update: Update, context: CallbackContext):
         update.message.reply_text("Nota registrata con successo!")
 
 
+# insights command handler, gives week insight
 def insights(update: Update, context: CallbackContext):
     username = update.effective_chat.username
     espe_fatti = get_espe_fatti(username)
@@ -131,6 +142,7 @@ def insights(update: Update, context: CallbackContext):
     update.message.reply_text(output)
 
 
+# invia_email handler, generates the docx file and send the email via smtp to the trainer
 def generate_docx_and_send_email(update: Update, context: CallbackContext):
     username = update.effective_chat.username
     fullname = get_user_info(username)['fullname']
@@ -141,6 +153,7 @@ def generate_docx_and_send_email(update: Update, context: CallbackContext):
     elimina_file(filename)
 
 
+# firebase data formatter, returns a formatted string
 def format_data(data, props):
     output = ""
     for i in data:
@@ -157,20 +170,14 @@ def format_data(data, props):
     return output
 
 
+# command handler mapping
 dispatcher.add_handler(CommandHandler('start', start))
 dispatcher.add_handler(CommandHandler('nuovo_espe', nuovo_espe))
 dispatcher.add_handler(CommandHandler('registra_nota', registra_nota))
 dispatcher.add_handler(CommandHandler('insights', insights))
 dispatcher.add_handler(CommandHandler('invia_email', generate_docx_and_send_email))
-
 dispatcher.add_handler(CallbackQueryHandler(inline_keyboard_handler))
 dispatcher.add_handler(MessageHandler(Filters.text & ~Filters.command, user_text_input_handler))
 
+# start polling (checks for updates on telegram's server)
 updater.start_polling()
-
-# COMANDI BOTFAHTER
-# start - inizia il bot
-# nuovo_espe - registra un espe fatto oggi
-# registra_nota - registra una nota di un espe fatto
-# insights - insights di questa settimana
-# invia_email - genera il file word

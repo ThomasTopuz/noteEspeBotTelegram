@@ -1,8 +1,8 @@
 import pyrebase
 from datetime import datetime
-from . import firebaseConfig
 from src.encryption.encrypter import encrypt, decrypt
 
+# firebase project initialization with configuration dictionary
 firebase = pyrebase.initialize_app({
     'apiKey': "AIzaSyD1XfInWrTrS3RpmCQzqNJJu-jiHH8Ores",
     'authDomain': "noteespebot.firebaseapp.com",
@@ -15,6 +15,7 @@ firebase = pyrebase.initialize_app({
 db = firebase.database()
 
 
+# push a test to firebase realtime database
 def push_espe_fatto(espe_fatto):
     now = datetime.now()
     data = {
@@ -29,8 +30,9 @@ def push_espe_fatto(espe_fatto):
     db.child(espe_fatto['username']).child('espe').push(data)
 
 
+# set the grade and calculate average for a given test
 def add_nota(espe_ricevuto):
-    # calcola la media
+    # calculate average grade for a school subject
     def calcola_media(materia, username, nuova_nota):
         espe_fatti = db.child(username).child('espe').order_by_child(
             'materia').equal_to(materia).get().val()
@@ -59,13 +61,14 @@ def add_nota(espe_ricevuto):
     )
 
 
-# GET
-# per registrare la nota
+# GETTERS
+
+# get all test without a grade (unset)
 def get_espe_senza_nota(username):
     return db.child(username).child('espe').order_by_child('nota').equal_to(-1).get()
 
 
-# espe fatti della settimana corrente
+# get the test made the current week
 def get_espe_fatti(username):
     return db.child(username).child('espe').order_by_child('week_number') \
         .equal_to(get_week_number()).get()
@@ -76,14 +79,18 @@ def get_espe_ritornati(username):
     return db.child(username).child('espe').order_by_child('week_number_ricevuto').equal_to(get_week_number()).get()
 
 
-# utility functions
+# UTILITY
+
+#  get current week number
 def get_week_number():
     return datetime.now().isocalendar()[1]
 
 
+# get user informations, email, year, fullname
 def get_user_info(username):
     return db.child(username).child('info').get().val()
 
 
+# get school subject for a given year
 def get_materie_by_anno(anno):
     return db.child("materie").child(anno).get().val().split(';')

@@ -5,6 +5,7 @@ import os
 from src.encryption.encrypter import *
 
 
+# function to generate a docx to send to the trainer
 def genera_docx(username, fullname):
     def get_week_day(n):
         d = datetime.now().strftime("%Y") + "-W" + str(fb.get_week_number())
@@ -69,5 +70,6 @@ def genera_docx(username, fullname):
     return filename
 
 
+# function to delete the generated docx once is sent
 def elimina_file(filename):
     os.remove(filename)

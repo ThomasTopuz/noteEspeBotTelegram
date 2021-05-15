@@ -7,6 +7,7 @@ from email.mime.text import MIMEText
 from email import encoders
 
 
+# function to send a email using smtplib (python built in) to the trainer
 def send_email(fullname, filename, email_adress):
     fromaddr = 'noteespebot@gmail.com'
 
