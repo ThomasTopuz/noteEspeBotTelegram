@@ -4,7 +4,7 @@
   Il bot è usabile da più utenti, identificando l'utente tramite l'username di telegram.
 
 <h2>Demo del progetto</h2>
-<img width="500px" src="https://user-images.githubusercontent.com/49570615/118365545-7c9ba480-b59d-11eb-9e89-e91620cdd34d.PNG">
+<img width="400px" src="https://user-images.githubusercontent.com/49570615/118365545-7c9ba480-b59d-11eb-9e89-e91620cdd34d.PNG">
 
 <h2>Funzionalità <img width="75px" height="75px" src="https://cdn.pixabay.com/photo/2017/10/24/00/39/bot-icon-2883144_1280.png"></h2>
 <ul>
