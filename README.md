@@ -6,6 +6,13 @@
 <h2>Demo del progetto</h2>
 <img width="500px" src="https://user-images.githubusercontent.com/49570615/118365545-7c9ba480-b59d-11eb-9e89-e91620cdd34d.PNG">
 
+<h2>Funzionalità <img width="75px" height="75px" src="https://cdn.pixabay.com/photo/2017/10/24/00/39/bot-icon-2883144_1280.png"></h2>
+<ul>
+  <li>Comando <b>"nuovo_espe"</b> : ritorna il markup per la scelta della materia (viene presa dal database di firebase, dalle informazioni dell'utente prende l'anno scolastico), in seguito si può inserire una osservazione</li>
+  <li>Comando <b>"registra_nota"</b> : ritorna il markup per la scelta dell'espe di qui si vuole registrare la nota, in seguito si può inserire la nota ed una ulteriore osservazione</li>
+    <li>Comando <b>"insights"</b> : restituisce una panoramica della settimana corrente degli espe fatti e quelli ricevuti, con le rispettive note</li>
+    <li>Comando <b>"invia_email"</b> : genera il documento word e lo invia sia al datore di lavoro (email fissa)</li>
+</ul>
 
 <h2>Database <img width="100px" src = "https://4.bp.blogspot.com/-rtNRVM3aIvI/XJX_U07Z-II/AAAAAAAAJXY/YpdOo490FTgdKOxM4qDG-2-EzcNFAWkKACK4BGAYYCw/s1600/logo%2Bfirebase%2Bicon.png"></h2>
 Come database userò il realtime database di firebase e lo organizzo nel seguente modo:
