@@ -70,13 +70,16 @@ def get_test_without_grade(username):
 
 # get the test made the current week
 def get_tests_done(username):
-    return db.child(username).child('espe').order_by_child('week_number') \
+    tests = db.child(username).child('espe').order_by_child('week_number') \
         .equal_to(get_week_number()).get()
+    return db.sort(tests, "data")
 
 
 # get tests received the current week
 def get_test_received_curr_week(username):
-    return db.child(username).child('espe').order_by_child('week_number_ricevuto').equal_to(get_week_number()).get()
+    tests = db.child(username).child('espe').order_by_child('week_number_ricevuto').equal_to(get_week_number()) \
+        .get()
+    return db.sort(tests, "data")
 
 
 # UTILITY
