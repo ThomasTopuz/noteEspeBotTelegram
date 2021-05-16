@@ -21,7 +21,7 @@ Per ricevere le materie di un utente ho strutturato una collection dove ad ogni 
 <h2>Librerie <img width="100px" src="https://cdn3.iconfinder.com/data/icons/logos-and-brands-adobe/512/267_Python-512.png"></h2>
 <ul>
 <li>"python-telegram-bot" è una wrapper dell'api di telegram --> https://github.com/python-telegram-bot/python-telegram-bot</li>
-<li>"python-docx" il file docx da inviare al datore di lavoro --> https://github.com/python-openxml/python-docx</li>
+<li>"python-docx" per generare il file docx da inviare al datore di lavoro --> https://github.com/python-openxml/python-docx</li>
 <li>"smtplib" per inviare la email al datore, allegando il docx --> https://docs.python.org/3/library/smtplib.html</li>
 <li>"Pyrebase4" mi permette di interfacciarmi con il mio realtime database di firebase --> https://github.com/thisbejim/Pyrebase</li>
 </ul>
