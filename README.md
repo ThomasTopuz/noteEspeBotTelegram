@@ -1,7 +1,7 @@
 <h1>Progetto NoteEspeBot <img width="75px" src="https://avatars.githubusercontent.com/u/16178365?s=400&v=4"></h1>
   L'idea del progetto è di creare un bot telegram per automatizzare l'invio degli espe fatti e delle note ricevute al datore di lavoro.
   Ogni settimana in un file docx bisogna mettere gli espe fatti e quelli ricevuti.
-  Prevedo di espandere il progetto a più utenti, identificando l'utente tramite l'username di telegram 
+  Il bot è usabile da più utenti, identificando l'utente tramite l'username di telegram.
 
 <h2>Demo del progetto</h2>
 <img width="500px" src="https://user-images.githubusercontent.com/49570615/118365545-7c9ba480-b59d-11eb-9e89-e91620cdd34d.PNG">
