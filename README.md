@@ -14,7 +14,7 @@
     <li>Comando <b>"invia_email"</b> : genera il documento word e lo invia sia al datore di lavoro (email fissa)</li>
 </ul>
 
-<h2>Database <img width="100px" src = "https://4.bp.blogspot.com/-rtNRVM3aIvI/XJX_U07Z-II/AAAAAAAAJXY/YpdOo490FTgdKOxM4qDG-2-EzcNFAWkKACK4BGAYYCw/s1600/logo%2Bfirebase%2Bicon.png"></h2>
+<h2>Database <img width="75px" src = "https://4.bp.blogspot.com/-rtNRVM3aIvI/XJX_U07Z-II/AAAAAAAAJXY/YpdOo490FTgdKOxM4qDG-2-EzcNFAWkKACK4BGAYYCw/s1600/logo%2Bfirebase%2Bicon.png"></h2>
 Come database userò il realtime database di firebase e lo organizzo nel seguente modo:
 <img src = "https://user-images.githubusercontent.com/49570615/118365475-39413600-b59d-11eb-81ac-339cba93958a.PNG">
 
@@ -25,7 +25,7 @@ e con un click si può aggiungere la nota.
 Per ricevere le materie di un utente ho strutturato una collection dove ad ogni anno scolastico corrispondono le materia che l'allievo ha.
 <img src = "https://user-images.githubusercontent.com/49570615/118365769-870a6e00-b59e-11eb-952f-274c6e7c8206.PNG">
 
-<h2>Librerie <img width="100px" src="https://cdn3.iconfinder.com/data/icons/logos-and-brands-adobe/512/267_Python-512.png"></h2>
+<h2>Librerie <img width="75px" src="https://cdn3.iconfinder.com/data/icons/logos-and-brands-adobe/512/267_Python-512.png"></h2>
 <ul>
 <li>"python-telegram-bot" è una wrapper dell'api di telegram --> https://github.com/python-telegram-bot/python-telegram-bot</li>
 <li>"python-docx" per generare il file docx da inviare al datore di lavoro --> https://github.com/python-openxml/python-docx</li>
@@ -33,7 +33,7 @@ Per ricevere le materie di un utente ho strutturato una collection dove ad ogni 
 <li>"Pyrebase4" mi permette di interfacciarmi con il mio realtime database di firebase --> https://github.com/thisbejim/Pyrebase</li>
 </ul>
 
-<h2>Hosting e Deploy <img width="100px" src="https://www.docker.com/sites/default/files/d8/styles/role_icon/public/2019-07/Moby-logo.png?itok=sYH_JEaJ"></h2>
+<h2>Hosting e Deploy <img width="75px" src="https://www.docker.com/sites/default/files/d8/styles/role_icon/public/2019-07/Moby-logo.png?itok=sYH_JEaJ"></h2>
 Per hostare il mio bot uso una vm di contabo, come ssh client uso termius.
 Per il deploy ho pacchetizzato il bot in una immagine di docker, ho fatto il push su docker hub e ho fatto il pull dalla mia virtual machine, per finire ho eseguito la mia immagine.
 
