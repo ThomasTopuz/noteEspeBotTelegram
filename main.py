@@ -59,7 +59,7 @@ def register_grade(update: Update, context: CallbackContext):
     username = update.effective_chat.username
     tests_without_grade = get_test_without_grade(username)
     if len(tests_without_grade.val()) == 0:
-        update.message.reply_text("Non hai più note da registrare.")
+        update.message.reply_text("Non hai note da registrare.")
         return
     keyboard = [
         [InlineKeyboardButton(
@@ -96,9 +96,12 @@ def inline_keyboard_handler(update: Update, context: CallbackContext):
 
 # generic user text input handler, acts differently depending on the mode variable
 def user_text_input_handler(update: Update, context: CallbackContext):
+    global mode
+    if mode == "":
+        update.message.reply_text("Scusa, non ho capito le tue intenzioni :(")
+
     username = update.effective_chat.username
     user_input = update.message.text.lower()
-    global mode
     global test_received
     # grade input
     if mode == "TEST_RECEIVED":
@@ -124,12 +127,14 @@ def user_text_input_handler(update: Update, context: CallbackContext):
         test_done['username'] = username
         push_test_done(test_done)
         update.message.reply_text("Espe registrato con successo!")
+        mode = ""
     # observation input (when test received)
     elif mode == "OBSERVATION_RECEIVED":
         # global test_received
         test_received['observation'] = user_input
         set_grade(test_received)
         update.message.reply_text("Nota registrata con successo!")
+        mode = ""
 
 
 # insights command handler, gives week insight
