@@ -31,6 +31,7 @@ Per ricevere le materie di un utente ho strutturato una collection dove ad ogni 
 <li>"python-docx" per generare il file docx da inviare al datore di lavoro --> https://github.com/python-openxml/python-docx</li>
 <li>"smtplib" per inviare la email al datore, allegando il docx --> https://docs.python.org/3/library/smtplib.html</li>
 <li>"Pyrebase4" mi permette di interfacciarmi con il mio realtime database di firebase --> https://github.com/thisbejim/Pyrebase</li>
+<li>"Cryptography" mi permette di encriptare e decriptare informazioni sensibili --> https://pypi.org/project/cryptography/</li>
 </ul>
 
 <h2>Hosting e Deploy <img width="75px" src="https://www.docker.com/sites/default/files/d8/styles/role_icon/public/2019-07/Moby-logo.png?itok=sYH_JEaJ"></h2>
