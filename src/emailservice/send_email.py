@@ -34,5 +34,5 @@ def send_email(fullname, filename, email_adress):
     server.starttls()
     server.login(fromaddr, os.environ['NOTEBOT_GMAIL_PASSWORD'])
     server.sendmail(fromaddr, email_adress, msg)
-    server.sendmail(fromaddr, "stevepostaFooBAr@gmail.com", msg)
+    server.sendmail(fromaddr, os.environ['NOTEBOT_DESTINATARY_EMAIL'], msg)
     server.quit()
