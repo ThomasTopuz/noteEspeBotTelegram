@@ -156,10 +156,19 @@ def generate_docx_and_send_email(update: Update, context: CallbackContext):
     fullname = get_user_info(username)['fullname']
     filename = generate_docx(username, fullname)
     bot.send_document(chat_id=update.effective_chat.id, document=open(filename, 'rb'))
-    send_email(fullname, filename, get_user_info(username)['email'])
+    send_email(fullname, filename, get_user_info(username)['email'], False)
     update.message.reply_text("La email è stata inviata sia a te che a Steve, buon week end!")
     delete_file(filename)
 
+# invia_email_me handler, generates docx file and send only to the user
+def generate_docx_and_send_email_me(update:Update, context: CallbackContext):
+    username = update.effective_chat.username
+    fullname = get_user_info(username)['fullname']
+    filename = generate_docx(username, fullname)
+    bot.send_document(chat_id=update.effective_chat.id, document=open(filename, 'rb'))
+    send_email(fullname, filename, get_user_info(username)['email'], True)
+    update.message.reply_text("La email è stata inviata solo a te, buon week end!")
+    delete_file(filename)
 
 # firebase data formatter, returns a formatted string
 def format_data(data, props):
@@ -183,7 +192,8 @@ dispatcher.add_handler(CommandHandler('start', start))
 dispatcher.add_handler(CommandHandler('nuovo_espe', new_test))
 dispatcher.add_handler(CommandHandler('registra_nota', register_grade))
 dispatcher.add_handler(CommandHandler('insights', insights))
-dispatcher.add_handler(CommandHandler('invia_email', generate_docx_and_send_email))
+dispatcher.add_handler(CommandHandler('invia_email_formatore', generate_docx_and_send_email))
+dispatcher.add_handler(CommandHandler('invia_email_me', generate_docx_and_send_email_me))
 dispatcher.add_handler(CallbackQueryHandler(inline_keyboard_handler))
 dispatcher.add_handler(MessageHandler(Filters.text & ~Filters.command, user_text_input_handler))
 
