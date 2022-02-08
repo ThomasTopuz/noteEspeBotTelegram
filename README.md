@@ -35,6 +35,6 @@ Per ricevere le materie di un utente ho strutturato una collection dove ad ogni 
 </ul>
 
 <h2>Hosting e Deploy <img width="75px" src="https://www.docker.com/sites/default/files/d8/styles/role_icon/public/2019-07/Moby-logo.png?itok=sYH_JEaJ"></h2>
-Per hostare il mio bot uso una vm di contabo, come ssh client uso termius.
+Per hostare il mio bot uso una vm di DigitalOcean, come ssh client uso termius.
 Per il deploy ho pacchetizzato il bot in una immagine di docker, ho fatto il push su docker hub e ho fatto il pull dalla mia virtual machine, per finire ho eseguito la mia immagine.
 
